@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lea Food Order • SMK Muhammadiyah 2</title>
+
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Canvas Confetti CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ==================== BACKGROUND ANIMATED BLOBS ==================== -->
+  <div class="bg-animated">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+  </div>
+
+  <!-- ==================== WELCOME / SCREEN 1 ==================== -->
+  <section id="welcome-screen" class="screen active">
+    <div class="floating-elements-container">
+      <span class="float-item" style="top: 10%; left: 15%; animation-delay: 0s;">🍱</span>
+      <span class="float-item" style="top: 20%; right: 15%; animation-delay: 1s;">🧋</span>
+      <span class="float-item" style="top: 65%; left: 10%; animation-delay: 2s;">📚</span>
+      <span class="float-item" style="top: 75%; right: 20%; animation-delay: 1.5s;">✨</span>
+      <span class="float-item" style="top: 40%; left: 80%; animation-delay: 0.5s;">💖</span>
+      <span class="float-item" style="top: 85%; left: 45%; animation-delay: 2.5s;">🥐</span>
+    </div>
+
+    <div class="welcome-card glass-morphism">
+      <div class="welcome-badge">
+        <i data-lucide="sparkles"></i> Student Food App
+      </div>
+      
+      <div class="avatar-welcome">
+        <span class="avatar-emoji">👩‍🎓</span>
+      </div>
+
+      <h1 class="welcome-title">LEA</h1>
+      <p class="welcome-subtitle">Kelas 12 • SMK Muhammadiyah 2</p>
+      <p class="welcome-tagline">"Pesan makanan favoritmu dengan mudah & cepat."</p>
+
+      <button id="btn-start" class="btn-primary btn-large ripple">
+        🍱 MULAI PESAN
+      </button>
+
+      <p class="welcome-footer">SMK Muhammadiyah 2 • Student Food App</p>
+    </div>
+  </section>
+
+  <!-- ==================== TRANSITION LOADING OVERLAY ==================== -->
+  <div id="transition-overlay" class="transition-overlay hidden">
+    <div class="loader-content">
+      <span class="food-spin">🍱</span>
+      <p>Menyiapkan Menu Favorit Lea...</p>
+    </div>
+  </div>
+
+  <!-- ==================== MAIN APP CONTAINER ==================== -->
+  <div id="app-container" class="app-container hidden">
+
+    <!-- TOP HEADER -->
+    <header class="app-header">
+      <div class="user-info">
+        <p class="greeting">Halo, Lea 👋</p>
+        <h2 class="sub-greeting">Mau makan apa hari ini?</h2>
+        <span class="badge-student">Kelas 12 • SMK Muhammadiyah 2</span>
+      </div>
+      <div class="header-actions">
+        <button class="icon-btn" id="btn-notif-trigger">
+          <i data-lucide="bell"></i>
+          <span class="notif-badge" id="notif-count">2</span>
+        </button>
+        <div class="profile-avatar-small" id="header-avatar">
+          👩‍🎓
+        </div>
+      </div>
+    </header>
+
+    <!-- SEARCH BAR -->
+    <div class="search-container">
+      <div class="search-box glass-morphism">
+        <i data-lucide="search" class="search-icon"></i>
+        <input type="text" id="search-input" placeholder="🔍 Cari makanan, minuman, atau jajanan..." />
+        <button class="clear-search hidden" id="clear-search"><i data-lucide="x"></i></button>
+      </div>
+    </div>
+
+    <!-- MAIN VIEWS / PAGES -->
+    <main class="content-area">
+
+      <!-- PAGE: HOME / EXPLORE -->
+      <section id="page-home" class="view-page active">
+        
+        <!-- CATEGORIES -->
+        <div class="category-wrapper">
+          <div class="category-scroll" id="category-list">
+            <button class="cat-chip active" data-category="all">
+              <span>✨</span> Semua
+            </button>
+            <button class="cat-chip" data-category="Makanan">
+              <span>🍛</span> Makanan
+            </button>
+            <button class="cat-chip" data-category="Mie">
+              <span>🍜</span> Mie
+            </button>
+            <button class="cat-chip" data-category="Fast Food">
+              <span>🍔</span> Fast Food
+            </button>
+            <button class="cat-chip" data-category="Ayam">
+              <span>🍗</span> Ayam
+            </button>
+            <button class="cat-chip" data-category="Minuman">
+              <span>🥤</span> Minuman
+            </button>
+            <button class="cat-chip" data-category="Dessert">
+              <span>🍰</span> Dessert
+            </button>
+            <button class="cat-chip" data-category="Snack">
+              <span>🍟</span> Snack
+            </button>
+          </div>
+        </div>
+
+        <!-- SECTION: UNTUKMU (RECOMMENDATION) -->
+        <div class="section-container" id="for-you-section">
+          <div class="section-header">
+            <h3>Untukmu 💗</h3>
+            <span class="sub-text">Pilihan spesial kantin</span>
+          </div>
+          <div class="horizontal-card-scroll" id="recommended-container">
+            <!-- Dynamic via JS -->
+          </div>
+        </div>
+
+        <!-- SECTION: SEMUA MENU -->
+        <div class="section-container">
+          <div class="section-header">
+            <h3 id="menu-section-title">Menu Makanan 🍽️</h3>
+          </div>
+
+          <div class="menu-grid" id="menu-container">
+            <!-- Dynamic via JS -->
+          </div>
+
+          <div id="no-results" class="no-results hidden">
+            <span>😢</span>
+            <p>Makanan tidak ditemukan</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- PAGE: FAVORITES -->
+      <section id="page-favorites" class="view-page hidden">
+        <div class="section-header">
+          <h3>❤️ Favorit Lea</h3>
+        </div>
+        <div class="menu-grid" id="favorites-container">
+          <!-- Dynamic via JS -->
+        </div>
+        <div id="no-favorites" class="no-results hidden">
+          <span>💖</span>
+          <p>Belum ada makanan favorit yang disimpan.</p>
+        </div>
+      </section>
+
+      <!-- PAGE: CART -->
+      <section id="page-cart" class="view-page hidden">
+        <div class="section-header">
+          <h3>🛒 Keranjang Belanja</h3>
+        </div>
+
+        <div id="cart-items-container" class="cart-list">
+          <!-- Dynamic Cart Items -->
+        </div>
+
+        <div id="empty-cart" class="no-results hidden">
+          <span>🛒</span>
+          <p>Keranjang belanjaanmu masih kosong!</p>
+        </div>
+
+        <div class="cart-summary-box glass-morphism hidden" id="cart-summary-box">
+          <div class="summary-row">
+            <span>Subtotal</span>
+            <span id="cart-subtotal">Rp0</span>
+          </div>
+          <div class="summary-row">
+            <span>Biaya Layanan</span>
+            <span>Rp1.000</span>
+          </div>
+          <hr class="divider" />
+          <div class="summary-row total-row">
+            <span>Total</span>
+            <span id="cart-total" class="price-highlight">Rp0</span>
+          </div>
+          <button id="btn-proceed-checkout" class="btn-primary btn-full margin-top-md">
+            CHECKOUT AKAN DIPROSES
+          </button>
+        </div>
+      </section>
+
+      <!-- PAGE: CHECKOUT -->
+      <section id="page-checkout" class="view-page hidden">
+        <div class="section-header">
+          <button class="back-btn" id="btn-back-to-cart"><i data-lucide="arrow-left"></i></button>
+          <h3>Checkout Pesanan</h3>
+        </div>
+
+        <div class="checkout-form glass-morphism">
+          <!-- INFO PEMESAN -->
+          <div class="form-group">
+            <label class="form-label">Informasi Pemesan</label>
+            <div class="info-card">
+              <p><strong>Nama:</strong> Lea</p>
+              <p><strong>Kelas:</strong> 12</p>
+              <p><strong>Sekolah:</strong> SMK Muhammadiyah 2</p>
+            </div>
+          </div>
+
+          <!-- LOKASI PENGANTARAN -->
+          <div class="form-group">
+            <label class="form-label">Lokasi Pengantaran / Pengambilan</label>
+            <div class="radio-options">
+              <label class="radio-card">
+                <input type="radio" name="location" value="Kantin Sekolah" checked>
+                <span>🏢 Kantin Sekolah</span>
+              </label>
+              <label class="radio-card">
+                <input type="radio" name="location" value="Kelas">
+                <span>🏫 Antar ke Kelas</span>
+              </label>
+              <label class="radio-card">
+                <input type="radio" name="location" value="Lobby">
+                <span>🛋️ Lobby Depan</span>
+              </label>
+              <label class="radio-card">
+                <input type="radio" name="location" value="Ambil Sendiri">
+                <span>🏃 Ambil Sendiri</span>
+              </label>
+            </div>
+            <div id="kelas-input-container" class="margin-top-sm hidden">
+              <input type="text" id="input-kelas-no" class="input-field" placeholder="Masukkan nomor/nama kelas (contoh: 12 TKJ 1)" value="12 SMK Muhammadiyah 2" />
+            </div>
+          </div>
+
+          <!-- WAKTU PENGAMBILAN -->
+          <div class="form-group">
+            <label class="form-label">Waktu Pengambilan / Pengantaran</label>
+            <select id="pickup-time" class="input-field">
+              <option value="Sekarang">Sekarang (Segera)</option>
+              <option value="Istirahat Pertama (09:45)">Istirahat Pertama (09:45)</option>
+              <option value="Istirahat Kedua (12:15)">Istirahat Kedua (12:15)</option>
+              <option value="Pulang Sekolah (15:00)">Pulang Sekolah (15:00)</option>
+            </select>
+          </div>
+
+          <!-- METODE PEMBAYARAN -->
+          <div class="form-group">
+            <label class="form-label">Metode Pembayaran</label>
+            <div class="radio-options">
+              <label class="radio-card">
+                <input type="radio" name="payment" value="Tunai" checked>
+                <span>💵 Tunai (Bayar di Tempat)</span>
+              </label>
+              <label class="radio-card">
+                <input type="radio" name="payment" value="QRIS">
+                <span>📱 QRIS Scan</span>
+              </label>
+              <label class="radio-card">
+                <input type="radio" name="payment" value="Saldo Student">
+                <span>💳 Saldo Siswa (Rp50.000)</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- SIMULASI QRIS -->
+          <div id="qris-simulation" class="qris-box hidden">
+            <p>Scan QRIS untuk Pembayaran</p>
+            <div class="qr-placeholder">
+              <i data-lucide="qr-code" style="width: 100px; height: 100px;"></i>
+            </div>
+            <span class="qris-note">A/N Kantin SMK Muhammadiyah 2</span>
+          </div>
+
+          <!-- SUMMARY & BUTTON -->
+          <div class="checkout-total-box margin-top-md">
+            <span>Total Pembayaran:</span>
+            <h3 id="checkout-total-price">Rp0</h3>
+          </div>
+
+          <button id="btn-pay-now" class="btn-primary btn-full margin-top-md">
+            BAYAR & PESAN SEKARANG
+          </button>
+        </div>
+      </section>
+
+      <!-- PAGE: ORDER SUCCESS & TRACKING -->
+      <section id="page-tracking" class="view-page hidden">
+        <div class="success-banner glass-morphism">
+          <div class="success-icon">🎉</div>
+          <h2>Pesanan Berhasil!</h2>
+          <p>Pesanan Lea sedang diproses oleh kantin.</p>
+          <div class="order-id-badge" id="tracking-order-id">#LEA-1209</div>
+        </div>
+
+        <div class="tracking-card glass-morphism margin-top-md">
+          <h4>Live Status Pesanan 🛵</h4>
+          <p class="estimated-time">Estimasi siap: <strong>10–15 menit</strong></p>
+
+          <div class="timeline">
+            <div class="timeline-step completed" id="step-1">
+              <div class="step-dot">🟢</div>
+              <div class="step-content">
+                <h5>Pesanan Diterima</h5>
+                <p>Kantin telah menerima pesananmu</p>
+              </div>
+            </div>
+            <div class="timeline-step active" id="step-2">
+              <div class="step-dot">🟡</div>
+              <div class="step-content">
+                <h5>Sedang Diproses</h5>
+                <p>Makanan sedang dimasak / disiapkan</p>
+              </div>
+            </div>
+            <div class="timeline-step" id="step-3">
+              <div class="step-dot">⚪</div>
+              <div class="step-content">
+                <h5>Siap Diambil / Diantar</h5>
+                <p>Silakan menuju lokasi pengantaran</p>
+              </div>
+            </div>
+            <div class="timeline-step" id="step-4">
+              <div class="step-dot">⚪</div>
+              <div class="step-content">
+                <h5>Selesai</h5>
+                <p>Selamat menikmati makananmu!</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button id="btn-to-history" class="btn-secondary btn-full margin-top-md">
+          Lihat Riwayat Pesanan
+        </button>
+      </section>
+
+      <!-- PAGE: HISTORY -->
+      <section id="page-history" class="view-page hidden">
+        <div class="section-header">
+          <h3>📋 Riwayat Pesanan</h3>
+        </div>
+        <div id="history-container" class="history-list">
+          <!-- Dynamic History Items -->
+        </div>
+      </section>
+
+      <!-- PAGE: NOTIFICATIONS -->
+      <section id="page-notifications" class="view-page hidden">
+        <div class="section-header">
+          <h3>🔔 Notifikasi</h3>
+        </div>
+        <div class="notif-list">
+          <div class="notif-card glass-morphism unread">
+            <div class="notif-icon">🔔</div>
+            <div class="notif-body">
+              <h4>Pesanan siap diambil!</h4>
+              <p>Pesanan #LEA-1209 sudah siap di kantin sekolah.</p>
+              <span class="notif-time">5 menit yang lalu</span>
+            </div>
+          </div>
+          <div class="notif-card glass-morphism">
+            <div class="notif-icon">🎉</div>
+            <div class="notif-body">
+              <h4>Promo Khusus Siswi SMK 2!</h4>
+              <p>Dapatkan diskon Rp3.000 untuk pembelian Rice Bowl hari ini.</p>
+              <span class="notif-time">1 jam yang lalu</span>
+            </div>
+          </div>
+          <div class="notif-card glass-morphism">
+            <div class="notif-icon">⭐</div>
+            <div class="notif-body">
+              <h4>Rekomendasi Spesial</h4>
+              <p>Cobain Es Teh Lemon favorit teman-teman kelas 12!</p>
+              <span class="notif-time">Kemarin</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- PAGE: PROFILE -->
+      <section id="page-profile" class="view-page hidden">
+        <div class="profile-header-card glass-morphism">
+          <div class="profile-avatar-large">👩‍🎓</div>
+          <h3>Lea</h3>
+          <p>Kelas 12 • SMK Muhammadiyah 2</p>
+          <span class="student-status-tag">Siswi Aktif</span>
+        </div>
+
+        <div class="profile-menu-list margin-top-md">
+          <button class="profile-menu-item" id="prof-btn-fav">
+            <i data-lucide="heart"></i> Favorit Saya
+          </button>
+          <button class="profile-menu-item" id="prof-btn-history">
+            <i data-lucide="history"></i> Riwayat Pesanan
+          </button>
+          <button class="profile-menu-item" id="prof-btn-notif">
+            <i data-lucide="bell"></i> Notifikasi
+          </button>
+          <button class="profile-menu-item">
+            <i data-lucide="settings"></i> Pengaturan Akun
+          </button>
+          <button class="profile-menu-item logout">
+            <i data-lucide="log-out"></i> Keluar
+          </button>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- BOTTOM NAVIGATION BAR -->
+    <nav class="bottom-nav glass-morphism">
+      <button class="nav-item active" data-target="page-home">
+        <i data-lucide="home"></i>
+        <span>Home</span>
+      </button>
+      <button class="nav-item" data-target="page-favorites">
+        <i data-lucide="heart"></i>
+        <span>Favorit</span>
+      </button>
+      <button class="nav-item cart-nav" data-target="page-cart">
+        <i data-lucide="shopping-bag"></i>
+        <span>Cart</span>
+        <span class="nav-cart-badge" id="nav-cart-count">0</span>
+      </button>
+      <button class="nav-item" data-target="page-history">
+        <i data-lucide="receipt"></i>
+        <span>Riwayat</span>
+      </button>
+      <button class="nav-item" data-target="page-profile">
+        <i data-lucide="user"></i>
+        <span>Profile</span>
+      </button>
+    </nav>
+  </div>
+
+  <!-- ==================== PRODUCT DETAIL MODAL ==================== -->
+  <div id="product-modal" class="modal-overlay hidden">
+    <div class="modal-content glass-morphism">
+      <button class="close-modal" id="close-modal"><i data-lucide="x"></i></button>
+
+      <div class="modal-image-container">
+        <img id="modal-img" src="" alt="Food" />
+        <span id="modal-tag" class="badge-tag">Best Seller</span>
+      </div>
+
+      <div class="modal-body">
+        <div class="modal-title-row">
+          <h3 id="modal-title">Nama Makanan</h3>
+          <span id="modal-rating" class="rating-badge">⭐ 4.9</span>
+        </div>
+
+        <p id="modal-price" class="modal-price-text">Rp0</p>
+        <p id="modal-desc" class="modal-desc-text">Deskripsi singkat makanan.</p>
+
+        <!-- EXTRA OPTIONS -->
+        <div class="options-group">
+          <h4>Pilihan Tambahan</h4>
+          <label class="checkbox-option">
+            <input type="checkbox" name="extra" value="Extra Sambal" data-price="2000">
+            <span>Extra Sambal (+Rp2.000)</span>
+          </label>
+          <label class="checkbox-option">
+            <input type="checkbox" name="extra" value="Extra Telur" data-price="3000">
+            <span>Extra Telur (+Rp3.000)</span>
+          </label>
+          <label class="checkbox-option">
+            <input type="checkbox" name="extra" value="Extra Keju" data-price="3000">
+            <span>Extra Keju (+Rp3.000)</span>
+          </label>
+        </div>
+
+        <!-- NOTES -->
+        <div class="options-group">
+          <h4>Catatan Khusus</h4>
+          <textarea id="modal-notes" placeholder="Contoh: Tidak pakai sambal, minyak dikit saja..."></textarea>
+        </div>
+
+        <!-- QUANTITY & ADD BUTTON -->
+        <div class="modal-footer-action">
+          <div class="quantity-control">
+            <button id="qty-minus" class="qty-btn">-</button>
+            <span id="modal-qty">1</span>
+            <button id="qty-plus" class="qty-btn">+</button>
+          </div>
+          <button id="btn-add-to-cart-modal" class="btn-primary btn-flex">
+            + Tambahkan ke Keranjang
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== TOAST NOTIFICATION ==================== -->
+  <div id="toast" class="toast hidden">
+    <span id="toast-message">✓ Item ditambahkan ke keranjang</span>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
+
